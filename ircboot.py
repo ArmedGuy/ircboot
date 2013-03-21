@@ -1,4 +1,4 @@
-__version__ = '0.7'
+__version__ = '0.8'
 __author__  = 'ArmedGuy'
 
 import b3, time, threading, re, socket, thread, sys, pyircbot
@@ -91,11 +91,16 @@ class IrcbootPlugin(b3.plugin.Plugin):
         if self._settings['irc']['serverpassword'] != "":
             botsettings['serverpassword'] = self._settings['irc']['serverpassword']
         self._ircbot = pyircbot.create(botsettings)
-        self._ircbot.RegisterEventHandler(IrcEvent.MessageRecieved, self.onIrcMsg)
+        
+        standard = pyircbot.StandardBotRoutines(self._ircbot, botsettings)
+        standard.queueJoinChannels(self._settings['irc']['channels'])
+        if self._settings['irc']['nickservpassword'] != "":
+            standard.queueNickServAuth(self._settings['irc']['nickservpassword'])
+        standard.autoReconnect()
+        
         self._ircbot.RegisterEventHandler(IrcEvent.UserJoined, self.onUserJoin)
         self._ircbot.RegisterEventHandler(IrcEvent.ChanmsgRecieved, self.onChanMsg)
         self._ircbot.RegisterEventHandler(IrcEvent.QueryRecieved, self.onQueryMsg)
-        self._ircbot.RegisterEventHandler(IrcEvent.BotLostConnection, self.onLostConn)
         self._ircbot.connect()
             
     def startup(self):
@@ -185,12 +190,6 @@ class IrcbootPlugin(b3.plugin.Plugin):
         
     # Handle pyircbot events
     
-    def onIrcMsg(self, type, data):
-        if type == IrcEvent.MessageRecieved and data.command == "376": # end MOTD, auth w/ NickServ and join channels
-            if self._settings['irc']['nickservpassword'] != "":
-                self._ircbot.msg("NickServ", "IDENTIFY %s" % self._settings['irc']['nickservpassword'])
-            for channel in self._settings['irc']['channels']:
-                self._ircbot.join(channel)
     def onUserJoin(self, type, data):
         if type == IrcEvent.UserJoined:
             user = IrcClient.GetClient(data.sender)
@@ -212,12 +211,6 @@ class IrcbootPlugin(b3.plugin.Plugin):
             if data.message[0] == "!" or data.message[0] == "@":
                 client = IrcClient.GetClient(data.sender)
                 self.injectClientSay(client, data.message)
-                
-                
-    def onLostConn(self, type, data):
-        if type == IrcEvent.BotLostConnection:
-            self.error("Bot lost connection to the IRC server!")
-            self._ircbot.exit()
         
 class IrcAuthSystem:
     AuthenticationFile = ""
