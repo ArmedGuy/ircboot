@@ -176,7 +176,12 @@ class IrcbootPlugin(b3.plugin.Plugin):
             client.message("Ingame player %s have been added with the level %i" % (str(sclient.name), int(sclient.maxLevel)))
         else:
             if("!" in m[0] and "@" in m[0]):
-                pass #future: add mask instead
+                try:
+                    level = int(m[1])
+                    IrcAuthSystem.setLevel(m[0], level, True)
+                    client.message("Mask %s added with level %s" % ( m[0], str(m[1])))
+                except:
+                    client.message("Invalid parameter 'level' for mask")
             else:
                 client.message("No client found with that name.")
     def cmd_ircrem(self, data, client, cmd=None):
