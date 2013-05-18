@@ -81,7 +81,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
         
         self.debug("Starting pyircbot with nick=%s, ident=%s, realname=%s, host=%s, port=%i" % (self._settings['irc']['nick'], self._settings['irc']['ident'], self._settings['irc']['realname'], self._settings['irc']['host'], int(self._settings['irc']['port'])))
         
-        botsettings = { #connect to bnc instead
+        botsettings = {
             'host': self._settings['irc']['host'],
             'port': int(self._settings['irc']['port']),
             'nick': self._settings['irc']['nick'],
@@ -209,8 +209,11 @@ class IrcbootPlugin(b3.plugin.Plugin):
                    client = IrcClient.GetClient(data.sender)
                    self.injectClientSay(client, b3msg)
             else: # full relay
-                client = IrcClient.GetClient(data.sender)
-                self.injectClientSay(client, data.message)
+                if data.message[0] == "!":
+                    
+                else:
+                    client = IrcClient.GetClient(data.sender)
+                    self.injectClientSay(client, data.message)
     def onQueryMsg(self, type, data):
         if type == IrcEvent.QueryRecieved:
             if data.message[0] == "!" or data.message[0] == "@":
@@ -328,5 +331,14 @@ class IrcClient(b3.clients.Client):
 
         return lines
     def message(self, message):
-        for line in self.getWrap(message):
+        lines = self.getWrap(message)
+        if len(lines) > 3:
+            # run threaded with msg delay to prevent bot from getting its ass handed by netsec
+            thread.start_new_thread(self.msg_threaded, (lines,))
+        else:
+            for line in lines:
+                self._ircbot.notice(self.name, "[pm]: %s" % line)
+    def msg_threaded(self, lines):
+        for line in lines:
             self._ircbot.notice(self.name, "[pm]: %s" % line)
+            time.sleep(0.2)
