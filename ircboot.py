@@ -208,9 +208,11 @@ class IrcbootPlugin(b3.plugin.Plugin):
                    b3msg = data.message[data.message.find("!"):]
                    client = IrcClient.GetClient(data.sender)
                    self.injectClientSay(client, b3msg)
+                elif data.message[:2] == "@!":
+                    b3msg = data.message[1:]
+                    client = IrcClient.GetClient(data.sender)
+                    self.injectClientSay(client, b3msg)
             else: # full relay
-                if data.message[0] == "!":
-                    
                 else:
                     client = IrcClient.GetClient(data.sender)
                     self.injectClientSay(client, data.message)
@@ -272,7 +274,8 @@ class IrcClient(b3.clients.Client):
     Clients = []
     _reColor = re.compile(r'(\^[0-9a-z])|[\x80-\xff]')
     maxLevel = 0
-    id = -2
+    id = 0
+    hide = True
     _user = ""
     
     @staticmethod
