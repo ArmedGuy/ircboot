@@ -213,9 +213,8 @@ class IrcbootPlugin(b3.plugin.Plugin):
                     client = IrcClient.GetClient(data.sender)
                     self.injectClientSay(client, b3msg)
             else: # full relay
-                else:
-                    client = IrcClient.GetClient(data.sender)
-                    self.injectClientSay(client, data.message)
+                client = IrcClient.GetClient(data.sender)
+                self.injectClientSay(client, data.message)
     def onQueryMsg(self, type, data):
         if type == IrcEvent.QueryRecieved:
             if data.message[0] == "!" or data.message[0] == "@":
