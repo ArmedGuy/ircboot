@@ -7,8 +7,8 @@
                 Only 1 bot should have this per channel
             
             rcon - RCon Relay Mode - default
-                No irc->game chat, all B3 commands need to be Pm(/query)'ed to the bot.
-                You can !broadcast commands in the main channel to all connected servers.
+                No irc->game chat, all B3 commands need to be Pm(/query)'ed to the bot or via name highlighting (B3_BOT !warn dude reason).
+                You can broadcast commands via @!*command* to all connected servers.
                 Talking to the server is possible with !say(b3 command).
                 
         -->
@@ -23,22 +23,22 @@
         -->
         <set name="gamechat">true</set>
         
-        <!-- Game event mode - public or private
+        <!-- Game event mode - true(on) or false(off)
             true: All game events are outputted in the channel(s) specified
             false: No game->irc events
         -->
         <set name="gameevents">true</set>
 		
-		<!-- Chat Prefix 
-			An prefix for all game chat/events that this bot generates, good for when you have multiple bots in 1 channel
-			IRC Colors is a good use here
-			Instead of ^C, you can use "]C"(without the ")
-		-->
-		<set name="chatprefix">]C4,2</set>
+        <!-- Chat Prefix 
+		An prefix for all game chat/events that this bot generates, good for when you have multiple bots in 1 channel
+		IRC Colors is a good use here
+		Instead of ^C, you can use "]C"(without the ")
+         -->
+        <set name="chatprefix">]C4,2</set>
     </settings>
 	<settings name="irc">
         <!-- IRC Nickname of the Bot -->
-		<set name="nick">HerrB3</set>
+	<set name="nick">HerrB3</set>
         <!-- Ident of the Bot -->
         <set name="ident">b3ircbot</set>
         <!-- The realname of the bot, can be anything -->
@@ -49,13 +49,13 @@
         <set name="port">6667</set>
         <!-- IRC Server Password - leave empty to connect without a password -->
         <set name="serverpassword"></set>
-		<!-- IRC NickServ Identification Password - leave empty for no authentication -->
+        <!-- IRC NickServ Identification Password - leave empty for no authentication -->
         <set name="nickservpassword"></set>
         <!-- IRC Channels to Join - Comma-separated list with channels(or 1 single channel), # required for channel names -->
         <set name="channels">#Pie-Studios</set>
 	</settings>
     <settings name="users">
-        <!-- Path to users file, can be path or http link(to get users from echelon) -->
+        <!-- Path to users file, can be path or TODO: http link(to get users from echelon) -->
         <set name="userfile">C:/SERVERS/B3/b3/extplugins/conf/users.txt</set>
     </settings>
     <settings name="commands">
@@ -65,7 +65,7 @@
         <set name="ircrem">80</set>
         <!-- Ingame command - Execute irc string(kinda useless if bot doesnt have op) -->
         <set name="ircexec">100</set>
-		<!-- Ingame/irc command - Execute rcon commands (command name combined via irc + rcon = ircon, pewpew)-->
-		<set name="ircon">80</set>
+        <!-- Ingame/irc command - Execute rcon commands (command name combined via irc + rcon = ircon, pewpew)-->
+        <set name="ircon">80</set>
     </settings>
 </configuration>
