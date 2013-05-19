@@ -26,8 +26,10 @@ class IrcbootPlugin(b3.plugin.Plugin):
         'relay': {
             'mode': 'rcon',
             'broadcasts': 'true',
-            'gamechatmode': 'public',
-            'gameeventmode': 'public',
+            'gamechat': 'true',
+            'consolechat': 'true',
+            'gameevents': 'true',
+            'chatprefix': '',
         },
         'commands': {
             'ircadd': 80,
@@ -130,7 +132,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
         if self._ircbot != None:
             return self._ircbot
         
-    def injectClientSay(self, user, msg): # will probably pass user,chan as IrcClient class instead
+    def injectClientSay(self, user, msg):
         # TODO: filter commands so that broken ones wont give errors(!leveltest for example)
         if user.maxLevel > 0 and self._settings['relay']['mode'] == "rcon": # do NOT allow guests to use commands
             self.console.queueEvent(self.console.getEvent('EVT_CLIENT_SAY', msg, user))
@@ -219,7 +221,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
                    b3msg = data.message[data.message.find("!"):]
                    client = IrcClient.GetClient(data.sender)
                    self.injectClientSay(client, b3msg)
-                elif data.message[:2] == "@!":
+                elif (data.message[:2] == "@!" or data.message[:2] == "@@") and self._settings['relay']['broadcasts'] == 'true':
                     b3msg = data.message[1:]
                     client = IrcClient.GetClient(data.sender)
                     self.injectClientSay(client, b3msg)

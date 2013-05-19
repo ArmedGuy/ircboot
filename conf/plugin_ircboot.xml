@@ -18,7 +18,7 @@
         <set name="broadcasts">true</set>
         
         <!-- Game chat - true(on) or false(off)
-            true: All game chat are outputted in the channel(s) specified
+            true: All game chat is outputted in the channel(s) specified
             false: No game->irc chat
         -->
         <set name="gamechat">true</set>
@@ -29,16 +29,22 @@
         -->
         <set name="gameevents">true</set>
 		
+		<!-- Console chat mode - true(on) or false(off)
+			true: All console chat is outputted in the channel(s) specified
+			false: No console->irc chat
+		-->
+		<set name="consolechat">true</set>
+		
         <!-- Chat Prefix 
 		An prefix for all game chat/events that this bot generates, good for when you have multiple bots in 1 channel
 		IRC Colors is a good use here
-		Instead of ^C, you can use "]C"(without the ")
+		Instead of ^C, you can use "]C"(without the ", obviously)
          -->
         <set name="chatprefix">]C4,2</set>
     </settings>
 	<settings name="irc">
         <!-- IRC Nickname of the Bot -->
-	<set name="nick">HerrB3</set>
+	    <set name="nick">HerrB3</set>
         <!-- Ident of the Bot -->
         <set name="ident">b3ircbot</set>
         <!-- The realname of the bot, can be anything -->
