@@ -26,8 +26,10 @@ class IrcbootPlugin(b3.plugin.Plugin):
         'relay': {
             'mode': 'rcon',
             'broadcasts': 'true',
-            'gamechatmode': 'public',
-            'gameeventmode': 'public',
+            'gamechat': 'true',
+            'consolechat': 'true',
+            'gameevents': 'true',
+            'chatprefix': '',
         },
         'commands': {
             'ircadd': 80,
@@ -41,6 +43,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
     }
     _ircbot = None
     _adminPlugin = None
+    _origOutputFunc = None
     def onLoadConfig(self):
         IrcbootPlugin.SpawnedPlugin = self
         if self._adminPlugin == None:
@@ -115,6 +118,9 @@ class IrcbootPlugin(b3.plugin.Plugin):
         self.registerEvent(b3.events.EVT_CLIENT_CONNECT)
         self.registerEvent(b3.events.EVT_CLIENT_DISCONNECT)
         
+        # reroute console output
+        self._origOutputFunc = self.console.say
+        self.console.say = self.onConsoleSay
     def getCmd(self, cmd):
         cmd = 'cmd_%s' % cmd
         if hasattr(self, cmd):
@@ -126,7 +132,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
         if self._ircbot != None:
             return self._ircbot
         
-    def injectClientSay(self, user, msg): # will probably pass user,chan as IrcClient class instead
+    def injectClientSay(self, user, msg):
         # TODO: filter commands so that broken ones wont give errors(!leveltest for example)
         if user.maxLevel > 0 and self._settings['relay']['mode'] == "rcon": # do NOT allow guests to use commands
             self.console.queueEvent(self.console.getEvent('EVT_CLIENT_SAY', msg, user))
@@ -163,7 +169,14 @@ class IrcbootPlugin(b3.plugin.Plugin):
                     for chan in self._settings['irc']['channels']:
                         self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "Player %s has left the server" % event.client.name)))
         self.debug("Got Command: %s" % event.type)
-      
+        
+    
+    def onConsoleSay(self, text):
+        self._origOutputFunc(text)
+        if self._settings['relay']['consolechat'] == "true":
+            if self._ircbot:
+                for chan in self._settings['irc']['channels']:
+                    self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "(CONSOLE) %s" % text)))
     # commands
     def cmd_ircadd(self, data, client, cmd=None):
         m = self._adminPlugin.parseUserCmd(data)
@@ -208,7 +221,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
                    b3msg = data.message[data.message.find("!"):]
                    client = IrcClient.GetClient(data.sender)
                    self.injectClientSay(client, b3msg)
-                elif data.message[:2] == "@!":
+                elif (data.message[:2] == "@!" or data.message[:2] == "@@") and self._settings['relay']['broadcasts'] == 'true':
                     b3msg = data.message[1:]
                     client = IrcClient.GetClient(data.sender)
                     self.injectClientSay(client, b3msg)
