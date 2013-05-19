@@ -18,8 +18,10 @@ The file format is:
 	
 	nick!ident@hostname:*b3 level*
 	
-NOTES: B3 level is an int(1,2,10,20,40,60,80,100); One user per line
-The first part(before the : ) supports wildcards via *.
+NOTES: 
+* B3 level is an int(1,2,10,20,40,60,80,100)
+* One user per line
+* The first part(before the : ) supports wildcards via *.
 
 Example:
 	
