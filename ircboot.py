@@ -41,6 +41,7 @@ class IrcbootPlugin(b3.plugin.Plugin):
     }
     _ircbot = None
     _adminPlugin = None
+    _origOutputFunc = None
     def onLoadConfig(self):
         IrcbootPlugin.SpawnedPlugin = self
         if self._adminPlugin == None:
@@ -115,6 +116,9 @@ class IrcbootPlugin(b3.plugin.Plugin):
         self.registerEvent(b3.events.EVT_CLIENT_CONNECT)
         self.registerEvent(b3.events.EVT_CLIENT_DISCONNECT)
         
+        # reroute console output
+        self._origOutputFunc = self.console.say
+        self.console.say = self.onConsoleSay
     def getCmd(self, cmd):
         cmd = 'cmd_%s' % cmd
         if hasattr(self, cmd):
@@ -163,7 +167,14 @@ class IrcbootPlugin(b3.plugin.Plugin):
                     for chan in self._settings['irc']['channels']:
                         self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "Player %s has left the server" % event.client.name)))
         self.debug("Got Command: %s" % event.type)
-      
+        
+    
+    def onConsoleSay(self, text):
+        self._origOutputFunc(text)
+        if self._settings['relay']['gamechat'] == "true":
+            if self._ircbot:
+                for chan in self._settings['irc']['channels']:
+                    self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "(CONSOLE) %s" % text)))
     # commands
     def cmd_ircadd(self, data, client, cmd=None):
         m = self._adminPlugin.parseUserCmd(data)
