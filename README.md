@@ -2,12 +2,21 @@
 
 A B3 plugin that enables remote administration via IRC 
 
-Usage
------
+Installation
+------------
 1. Install as regular B3 plugin
 2. Place pyircbot.py(required dependancy) in your b3 installation folder(where b3_run.py or b3_run.exe exists)
 3. Configure plugin_ircboot.xml. Instructions are in the file.
 
+
+B3 Commands
+-----------
+* !ircadd <ingame user> - Adds user with their ingame level
+* !ircadd <nick!ident@hostname mask> <level> - Adds custom mask with specific level
+* !ircrem - Not implemented yet
+* !ircexec - Not Implemented yet
+* !ircon <rcon string> - Executes rcon command, sends any output back as pm
+Prepend @ in IRC to broadcast to all b3 bots.
 
 Permissions
 -----------
