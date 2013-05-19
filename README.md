@@ -11,11 +11,13 @@ Installation
 
 B3 Commands
 -----------
-* !ircadd <ingame user> - Adds user with their ingame level
-* !ircadd <nick!ident@hostname mask> <level> - Adds custom mask with specific level
-* !ircrem - Not implemented yet
-* !ircexec - Not Implemented yet
-* !ircon <rcon string> - Executes rcon command, sends any output back as pm
+
+	!ircadd <ingame user> - Adds user with their ingame level
+	!ircadd <nick!ident@hostname mask> <level> - Adds custom mask with specific level
+	!ircrem - Not implemented yet
+	!ircexec - Not Implemented yet
+	!ircon <rcon string> - Executes rcon command, sends any output back as pm
+	
 Prepend @ in IRC to broadcast to all b3 bots.
 
 Permissions
