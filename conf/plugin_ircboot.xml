@@ -41,37 +41,51 @@
 		Instead of ^C, you can use "]C"(without the ", obviously)
          -->
         <set name="chatprefix">]C4,2</set>
+		
     </settings>
 	<settings name="irc">
         <!-- IRC Nickname of the Bot -->
 	    <set name="nick">HerrB3</set>
+		
         <!-- Ident of the Bot -->
         <set name="ident">b3ircbot</set>
+		
         <!-- The realname of the bot, can be anything -->
         <set name="realname">Big Brother</set>
+		
         <!-- IRC server hostname -->
         <set name="host">irc.rizon.net</set>
+		
         <!-- IRC Port - Port for IRC server -->
         <set name="port">6667</set>
+		
         <!-- IRC Server Password - leave empty to connect without a password -->
         <set name="serverpassword"></set>
+		
         <!-- IRC NickServ Identification Password - leave empty for no authentication -->
         <set name="nickservpassword"></set>
+		
         <!-- IRC Channels to Join - Comma-separated list with channels(or 1 single channel), # required for channel names -->
         <set name="channels">#Pie-Studios</set>
+		
 	</settings>
     <settings name="users">
         <!-- Path to users file, can be path or TODO: http link(to get users from echelon) -->
         <set name="userfile">C:/SERVERS/B3/b3/extplugins/conf/users.txt</set>
+		
     </settings>
     <settings name="commands">
         <!-- Ingame command - Add either an ingame user(with their level), or an irc user with a specified Nick!Ident@host and level to the access file -->
         <set name="ircadd">80</set>
+		
         <!-- Ingame command - Remove an irc user -->
         <set name="ircrem">80</set>
+		
         <!-- Ingame command - Execute irc string(kinda useless if bot doesnt have op) -->
         <set name="ircexec">100</set>
+		
         <!-- Ingame/irc command - Execute rcon commands (command name combined via irc + rcon = ircon, pewpew)-->
         <set name="ircon">80</set>
+		
     </settings>
 </configuration>
