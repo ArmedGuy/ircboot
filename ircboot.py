@@ -173,10 +173,13 @@ class IrcbootPlugin(b3.plugin.Plugin):
     
     def onConsoleSay(self, text):
         self._origOutputFunc(text)
-        if self._settings['relay']['consolechat'] == "true":
-            if self._ircbot:
-                for chan in self._settings['irc']['channels']:
-                    self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "(CONSOLE) %s" % text)))
+        try:
+            if self._settings['relay']['consolechat'] == "true":
+                if self._ircbot:
+                    for chan in self._settings['irc']['channels']:
+                        self._ircbot.msg(chan, "%s%s" % (self._settings['relay']['chatprefix'], re.sub(self._reColor, '', "(CONSOLE) %s" % text)))
+        except:
+            pass
     # commands
     def cmd_ircadd(self, data, client, cmd=None):
         m = self._adminPlugin.parseUserCmd(data)
