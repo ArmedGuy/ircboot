@@ -13,9 +13,9 @@ B3 Commands
 -----------
 
 	!ircadd <ingame user> - Adds user with their ingame level
-	!ircadd <nick!ident@hostname mask> <level> - Adds custom mask with specific level
-	!ircrem - Not implemented yet
-	!ircexec - Not Implemented yet
+	!ircadd <nick!ident@hostname mask> <level> - Adds custom mask with specific level to authlist
+	!ircrem <nick!ident@hostname mask> - Removes the mask from the authlist
+	!ircexec <target> <message> - Send a message from the bot to an IRC user or IRC channel.
 	!ircon <rcon string> - Executes rcon command, sends any output back as pm
 	
 Prepend @ in IRC to broadcast to all b3 bots.
